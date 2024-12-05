@@ -24,3 +24,11 @@ To run this example:
         
         Windows: ```set FLASK_DEBUG=1 && python -m flask run```
         Mac/Linux:  ```export FLASK_DEBUG=1 && python -m flask run```
+
+-----------------------
+## Running the tests
+-----------------------
+
+```
+python -m pytest -v tests/rest_routes.py
+```
