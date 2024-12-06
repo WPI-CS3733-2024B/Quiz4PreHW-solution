@@ -96,6 +96,7 @@ def test_index_post(request,test_client,init_database):
     assert courses[0].major== 'CS'
     assert courses[0].roomid ==  room_id
     assert len(courses) == 1
+    
     assert b"CS 3733" in response.data 
     assert b"Soft Eng" in response.data  
     assert b"TAs:" in response.data   
@@ -157,16 +158,16 @@ def test_assignta_post(request,test_client,init_database):
 
     assert response.status_code == 200
 
+    # get the TA having email 'quentin@wpi.edu'
+    tas = db.session.scalars(sqla.select(TeachingAssistant).where(TeachingAssistant.ta_email == 'quentin@wpi.edu')).all()
+    assert len(tas) == 1
+    assert tas[0].ta_name== 'Quentin'
+    
     # get the CS 3733 course object   
     thecourse = db.session.scalars(sqla.select(Course).where(Course.major == 'CS' and Course.coursenum == '3733')).first()
     all_tas = db.session.scalars(thecourse.tas.select()).all()
     assert len(all_tas) == 1
     assert all_tas[0].ta_name ==  'Quentin'
-
-    # get the TA having email 'quentin@wpi.edu'
-    tas = db.session.scalars(sqla.select(TeachingAssistant).where(TeachingAssistant.ta_email == 'quentin@wpi.edu')).all()
-    assert len(tas) == 1
-    assert tas[0].ta_name== 'Quentin'
 
     assert b"CS 3733" in response.data 
     assert b"Software Engineering" in response.data  
